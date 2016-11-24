@@ -25,7 +25,7 @@ public class VierGewinnt {
 			Arrays.fill(column, Token.empty);
 
 		/* initialize players */
-		players[0] = new HumanPlayer();
+		players[0] = new ComputerPlayer();
 		System.out.print("Play against a human opponent? (y / n) ");
 		String opponent = new Scanner(System.in).nextLine().toLowerCase();
 		while ((1 != opponent.length()) || (-1 == ("yn".indexOf(opponent)))) {
@@ -164,8 +164,11 @@ public class VierGewinnt {
 		// vertical
 		if (runner.run(1, 0) >= WINNING_SCORE)
 			return true;
-		// diagonal
+		// diagonal right up
 		if (runner.run(1, 1) >= WINNING_SCORE)
+			return true;
+		// diagonal left up
+		if (runner.run(1, -1) >= WINNING_SCORE)
 			return true;
 
 		return false;
