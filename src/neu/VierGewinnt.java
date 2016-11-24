@@ -1,3 +1,4 @@
+package neu;
 /* ************************************************************************* *\
 *                Programmierung 1 HS 2016 - Serie 4-1                         * 
 \* ************************************************************************* */
@@ -68,7 +69,7 @@ public class VierGewinnt
 	/**
 	 * Inserts the token at the specified column (if possible)
 	 * @param column the column to insert the token
-	 * @param token the players token
+	 * @param tok the players token
 	 * @return the row where the token landed 
 	 */
 	private int insertToken( int column, Token tok )
