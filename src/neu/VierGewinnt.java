@@ -7,31 +7,30 @@ package neu;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import vier_gewinnt.Runner;
-import vier_gewinnt.Token;
-
 public class VierGewinnt {
-
+	
 	public static final int COLS = 7;
 	public static final int ROWS = 6;
 	public static final int WINNING_SCORE = 4;
-
+	
 	private Token[][] board = new Token[COLS][ROWS]; // 7 columns with 6 fields each
 	private IPlayer[] players = new IPlayer[2]; //  two players
 
+	private int currentPlayer;
+	
 	/** initialize board and players and start the game */
 	public void play() {
 		// initialize the board
 		for (Token[] column : this.board)
 			Arrays.fill(column, Token.empty);
-
+		
 		/* initialize players */
 		players[0] = new HumanPlayer();
 		System.out.print("Play against a human opponent? (y / n) ");
 		String opponent = new Scanner(System.in).nextLine().toLowerCase();
 		while ((1 != opponent.length()) || (-1 == ("yn".indexOf(opponent)))) {
 			System.out
-			.print("Can't understand your answer. Play against a human opponent? (y / n) ");
+					.print("Can't understand your answer. Play against a human opponent? (y / n) ");
 			opponent = new Scanner(System.in).nextLine().toLowerCase();
 		}
 		if (opponent.equals("y"))
@@ -40,10 +39,10 @@ public class VierGewinnt {
 			players[1] = new ComputerPlayer();
 		players[0].setToken(Token.player1);
 		players[1].setToken(Token.player2);
-
+		
 		/* play... */
 		boolean solved = false;
-		int currentPlayer = (new java.util.Random()).nextInt(2); // choose randomly who begins
+		currentPlayer = (new java.util.Random()).nextInt(2); // choose randomly who begins
 		System.out.println("current player: " + currentPlayer);
 		int insertCol, insertRow; // starting from 0
 		while (!solved && !this.isBoardFull()) {
@@ -65,7 +64,7 @@ public class VierGewinnt {
 		else
 			System.out.println("Draw! Game over.");
 	}
-
+	
 	/**
 	 * Inserts the token at the specified column (if possible) <<<<<<< HEAD
 	 *
@@ -85,20 +84,20 @@ public class VierGewinnt {
 			System.out.println("Please choose a column between 1 and " + COLS + "!");
 		else if (isColFull(column) == true)
 			System.out.println("Please choose a column which is not already full!");
-
+		
 		int freeRow = colHeight(column);
 		board[column][freeRow] = tok;
-
+		
 		return freeRow;
 	}
-
+	
 	/**
 	 * @returns true if the column col is already full and false otherwise.
 	 */
 	private boolean isColFull(int col) {
 		return isColFull(this.board, col);
 	}
-
+	
 	/**
 	 * @returns true if the column col is already full and false otherwise.
 	 */
@@ -109,20 +108,20 @@ public class VierGewinnt {
 		else
 			return false;
 	}
-	
+
 	/**
 	 * @returns the lowest Row which is free of a column
 	 */
 	private int colHeight(int col) {
 		return colHeight(this.board, col);
 	}
-
+	
 	/**
 	 * @returns the lowest Row which is free of a column
 	 */
 	public static int colHeight(Token[][] board, int col) {
 		int freeRow = 0;
-		
+
 		while (freeRow < ROWS) {
 			if (board[col][freeRow] == Token.empty)
 				break;
@@ -130,7 +129,7 @@ public class VierGewinnt {
 		}
 		return freeRow;
 	}
-	
+
 	/**
 	 * Checks if every position is occupied
 	 *
@@ -139,7 +138,7 @@ public class VierGewinnt {
 	private boolean isBoardFull() {
 		return isBoardFull(this.board);
 	}
-	
+
 	/**
 	 * Checks if every position is occupied
 	 *
@@ -152,7 +151,7 @@ public class VierGewinnt {
 					return false;
 		return true;
 	}
-
+	
 	/**
 	 * Checks for at least four equal tokens in a row in either direction, starting from the given
 	 * position.
@@ -168,10 +167,10 @@ public class VierGewinnt {
 		// diagonal
 		if (runner.run(1, 1) >= WINNING_SCORE)
 			return true;
-
+		
 		return false;
 	}
-
+	
 	/** Returns a (deep) copy of the board array */
 	private Token[][] getCopyOfBoard() {
 		Token[][] copiedBoard = new Token[COLS][ROWS];
@@ -180,7 +179,7 @@ public class VierGewinnt {
 				copiedBoard[i][j] = this.board[i][j];
 		return copiedBoard;
 	}
-
+	
 	/** returns a graphical representation of the board */
 	public static String displayBoard(Token[][] myBoard) {
 		String rowDelimiter = "+";
@@ -190,7 +189,7 @@ public class VierGewinnt {
 			rowNumbering += " " + (col + 1) + "  ";
 		}
 		rowDelimiter += "\n";
-
+		
 		String rowStr;
 		String presentation = rowDelimiter;
 		for (int row = myBoard[0].length - 1; row >= 0; row--) {
@@ -202,10 +201,69 @@ public class VierGewinnt {
 		presentation += rowNumbering;
 		return presentation;
 	}
-
+	
 	/** main method, starts the program */
 	public static void main(String args[]) {
 		VierGewinnt game = new VierGewinnt();
 		game.play();
+	}
+
+	public class Runner {
+
+		VierGewinnt game;
+		int homeCol, homeRow;
+		int col = 0, row = 0;
+		
+		public Runner(VierGewinnt game, int homeCol, int homeRow) {
+			this.game = game;
+			this.homeCol = homeCol;
+			this.homeRow = homeRow;
+		}
+		
+		public int run(int dcol, int drow) {
+			int score = 1;
+			this.goHome();
+			score += this.forwardRun(dcol, drow);
+			this.goHome();
+			score += this.reverseRun(dcol, drow);
+			return score;
+		}
+
+		private void goHome() {
+			col = homeCol;
+			row = homeRow;
+		}
+
+		private int reverseRun(int dcol, int drow) {
+			return this.forwardRun(-dcol, -drow);
+		}
+
+		private int forwardRun(int dcol, int drow) {
+			this.move(dcol, drow);
+			if (outOfBounds())
+				return 0;
+			if (this.samePlayer())
+				return 1 + this.forwardRun(dcol, drow);
+			else
+				return 0;
+		}
+
+		private boolean outOfBounds() {
+			if (col < 0 || row < 0 || col >= VierGewinnt.COLS || row >= VierGewinnt.ROWS)
+				return true;
+			return false;
+		}
+
+		private boolean samePlayer() {
+			if (game.getCopyOfBoard()[col][row].equals(players[currentPlayer].getToken()))
+				return true;
+			else
+				return false;
+		}
+
+		private void move(int dcol, int drow) {
+			col += dcol;
+			row += drow;
+		}
 	}
 }
