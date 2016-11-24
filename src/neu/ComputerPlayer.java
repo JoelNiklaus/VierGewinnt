@@ -12,12 +12,11 @@ public class ComputerPlayer implements IPlayer {
 	public static final int COLS = 7;
 	public static final int ROWS = 6;
 	public static final int WINNING_SCORE = 4;
-	public static final int GOOD_SCORE = 4;
+	public static final int GOOD_SCORE = 3;
 
 	private Token ownToken;
 	
 	private boolean firstTurn = true;
-	private boolean amIStarting = true;
 
 	private Token[][] board;
 	
@@ -30,67 +29,65 @@ public class ComputerPlayer implements IPlayer {
 		this.board = board;
 		Token opponentToken = getOtherToken();
 		int[] colRating = new int[COLS];
-		colRating[3] = 50;
-		colRating[2] = 40;
-		colRating[4] = 40;
-		colRating[1] = 30;
-		colRating[5] = 30;
+		colRating[3] = 3;
+		colRating[2] = 2;
+		colRating[4] = 2;
+		colRating[1] = 1;
+		colRating[5] = 1;
 
 		ArrayList<Integer> cols = deleteFullColumns();
 		
-		// Starting Strategy
-		int numberOfTokensPlaced = getNumberOfTokensPlaced(board);
-		// I can start
-		if (numberOfTokensPlaced == 0)
-			return 3;
-		// first Turn but the opponent started
-		if (numberOfTokensPlaced == 1) {
-			// if opponent placed token in the middle
-			if (board[3][0] == opponentToken)
-				return 4;
-			else
+		if (firstTurn) {
+			// Starting Strategy
+			int numberOfTokensPlaced = getNumberOfTokensPlaced(board);
+			// I can start
+			if (numberOfTokensPlaced == 0)
 				return 3;
-		} else
-			firstTurn = false;
+			// first Turn but the opponent started
+			if (numberOfTokensPlaced == 1) {
+				// if opponent placed token in the middle
+				if (board[3][0] == opponentToken)
+					return 4;
+				else
+					return 3;
+			} else
+				firstTurn = false;
+		}
 		
 		// selbst siegen
 		for (int col : cols) {
-			Token[][] copiedBoard = getCopyOfBoard();
-			copiedBoard = insertToken(col, ownToken, copiedBoard);
-			if (checkPossibleVierGewinnt(col, colHeight(col), ownToken, copiedBoard))
+			Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
+			if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, ownToken,
+					copiedBoard))
 				return col;
 		}
 
 		// Gegner Sieg verhindern
 		for (int col : cols) {
-			Token[][] copiedBoard = getCopyOfBoard();
-			copiedBoard = insertToken(col, opponentToken, copiedBoard);
-			if (checkPossibleVierGewinnt(col, colHeight(col), opponentToken, copiedBoard))
+			Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard());
+			if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
+					copiedBoard))
 				return col;
 		}
 
 		// Gegner Sieg in nächster Runde verhindern -> diese Kolonne sperren
 		// TODO
-		for (int col : cols) {
-			Token[][] copiedBoard = getCopyOfBoard();
-			copiedBoard = insertToken(col, ownToken, copiedBoard);
-			for (int col2 : cols) {
-				Token[][] copiedBoard2 = getCopyOfBoard(copiedBoard);
-				copiedBoard2 = insertToken(col2, opponentToken, copiedBoard2);
-				if (checkPossibleVierGewinnt(col2, colHeight(col2), opponentToken, copiedBoard2))
+		for (int col : cols)
+			if (colHeight(col) < COLS - 2) {
+				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
+				copiedBoard = insertToken(col, opponentToken, copiedBoard);
+				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
+						copiedBoard))
 					colRating[col] = -1000;
 			}
-		}
 		
 		// 3 nacheinander versuchen
-		// TODO
 		for (int col : cols) {
-			Token[][] copiedBoard = getCopyOfBoard();
-			copiedBoard = insertToken(col, ownToken, copiedBoard);
-			if (checkPossibleGoodScore(col, colHeight(col), ownToken, copiedBoard))
+			Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
+			if (checkPossibleGoodScore(col, colHeight(copiedBoard, col) - 1, ownToken, copiedBoard))
 				colRating[col] += 10;
 		}
-
+		
 		return getColWithBestRating(colRating, cols);
 	}
 
@@ -166,7 +163,7 @@ public class ComputerPlayer implements IPlayer {
 		else if (isColFull(column) == true)
 			System.out.println("Please choose a column which is not already full!");
 		
-		int freeRow = colHeight(column);
+		int freeRow = colHeight(board, column);
 		board[column][freeRow] = token;
 		
 		return board;
@@ -200,36 +197,36 @@ public class ComputerPlayer implements IPlayer {
 	}
 	
 	private boolean checkPossibleVierGewinnt(int col, int row, Token player, Token[][] board) {
-		Runner runner = new Runner(board, col, row);
-		// horizontal
-		if (runner.run(0, 1, player) >= WINNING_SCORE)
-			return true;
+		Runner runner = new Runner(board, col, row, player);
 		// vertical
-		if (runner.run(1, 0, player) >= WINNING_SCORE)
+		if (runner.run(0, 1) >= WINNING_SCORE)
+			return true;
+		// horizontal
+		if (runner.run(1, 0) >= WINNING_SCORE)
 			return true;
 		// diagonal right up
-		if (runner.run(1, 1, player) >= WINNING_SCORE)
+		if (runner.run(1, 1) >= WINNING_SCORE)
 			return true;
 		// diagonal left up
-		if (runner.run(1, -1, player) >= WINNING_SCORE)
+		if (runner.run(1, -1) >= WINNING_SCORE)
 			return true;
 		
 		return false;
 	}
 	
 	private boolean checkPossibleGoodScore(int col, int row, Token player, Token[][] board) {
-		Runner runner = new Runner(board, col, row);
-		// horizontal
-		if (runner.run(0, 1, player) >= GOOD_SCORE)
-			return true;
+		Runner runner = new Runner(board, col, row, player);
 		// vertical
-		if (runner.run(1, 0, player) >= GOOD_SCORE)
+		if (runner.run(0, 1) == GOOD_SCORE)
+			return true;
+		// horizontal
+		if (runner.run(1, 0) == GOOD_SCORE)
 			return true;
 		// diagonal right up
-		if (runner.run(1, 1, player) >= GOOD_SCORE)
+		if (runner.run(1, 1) == GOOD_SCORE)
 			return true;
 		// diagonal left up
-		if (runner.run(1, -1, player) >= GOOD_SCORE)
+		if (runner.run(1, -1) == GOOD_SCORE)
 			return true;
 		
 		return false;
@@ -248,19 +245,21 @@ public class ComputerPlayer implements IPlayer {
 		Token[][] board;
 		int homeCol, homeRow;
 		int col = 0, row = 0;
+		Token player;
 		
-		public Runner(Token[][] board, int homeCol, int homeRow) {
+		public Runner(Token[][] board, int homeCol, int homeRow, Token player) {
 			this.board = board;
 			this.homeCol = homeCol;
 			this.homeRow = homeRow;
+			this.player = player;
 		}
 		
-		public int run(int dcol, int drow, Token player) {
+		public int run(int dcol, int drow) {
 			int score = 1;
 			this.goHome();
-			score += this.forwardRun(dcol, drow, player);
+			score += this.forwardRun(dcol, drow);
 			this.goHome();
-			score += this.reverseRun(dcol, drow, player);
+			score += this.reverseRun(dcol, drow);
 			return score;
 		}
 
@@ -269,27 +268,27 @@ public class ComputerPlayer implements IPlayer {
 			row = homeRow;
 		}
 
-		private int reverseRun(int dcol, int drow, Token player) {
-			return this.forwardRun(-dcol, -drow, player);
+		private int reverseRun(int dcol, int drow) {
+			return this.forwardRun(-dcol, -drow);
 		}
 
-		private int forwardRun(int dcol, int drow, Token player) {
+		private int forwardRun(int dcol, int drow) {
 			this.move(dcol, drow);
 			if (outOfBounds())
 				return 0;
-			if (this.samePlayer(player))
-				return 1 + this.forwardRun(dcol, drow, player);
+			if (this.samePlayer())
+				return 1 + this.forwardRun(dcol, drow);
 			else
 				return 0;
 		}
 
 		private boolean outOfBounds() {
-			if (col < 0 || row < 0 || col >= VierGewinnt.COLS || row >= VierGewinnt.ROWS)
+			if (col < 0 || row < 0 || col >= COLS || row >= ROWS)
 				return true;
 			return false;
 		}
 
-		private boolean samePlayer(Token player) {
+		private boolean samePlayer() {
 			if (board[col][row].equals(player))
 				return true;
 			else
@@ -300,6 +299,27 @@ public class ComputerPlayer implements IPlayer {
 			col += dcol;
 			row += drow;
 		}
+	}
+	
+	public static String displayBoard(Token[][] myBoard) {
+		String rowDelimiter = "+";
+		String rowNumbering = " ";
+		for (int col = 0; col < myBoard.length; col++) {
+			rowDelimiter += "---+";
+			rowNumbering += " " + (col + 1) + "  ";
+		}
+		rowDelimiter += "\n";
+
+		String rowStr;
+		String presentation = rowDelimiter;
+		for (int row = myBoard[0].length - 1; row >= 0; row--) {
+			rowStr = "| ";
+			for (int col = 0; col < myBoard.length; col++)
+				rowStr += myBoard[col][row].toString() + " | ";
+			presentation += rowStr + "\n" + rowDelimiter;
+		}
+		presentation += rowNumbering;
+		return presentation;
 	}
 	
 	@Override
