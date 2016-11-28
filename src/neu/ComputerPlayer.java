@@ -145,20 +145,8 @@ public class ComputerPlayer implements IPlayer {
 		return copiedBoard;
 	}
 	
-	private int insertToken(int column, Token token) {
-		if ((column < 1) || (column > 7))
-			System.out.println("Please choose a column between 1 and " + COLS + "!");
-		else if (isColFull(column) == true)
-			System.out.println("Please choose a column which is not already full!");
-		
-		int freeRow = colHeight(column);
-		board[column][freeRow] = token;
-		
-		return freeRow;
-	}
-	
 	private Token[][] insertToken(int column, Token token, Token[][] board) {
-		if ((column < 1) || (column > 7))
+		if ((column < 0) || (column > 7))
 			System.out.println("Please choose a column between 1 and " + COLS + "!");
 		else if (isColFull(column) == true)
 			System.out.println("Please choose a column which is not already full!");

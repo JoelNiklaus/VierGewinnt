@@ -26,7 +26,8 @@ public class VierGewinnt {
 
 		/* initialize players */
 		players[0] = new ComputerPlayer();
-		System.out.print("Play against a human opponent? (y / n) ");
+        boolean seeSteps = false;
+		System.out.print("Play yourself? (y / n) ");
 		String opponent = new Scanner(System.in).nextLine().toLowerCase();
 		while ((1 != opponent.length()) || (-1 == ("yn".indexOf(opponent)))) {
 			System.out
@@ -35,8 +36,17 @@ public class VierGewinnt {
 		}
 		if (opponent.equals("y"))
 			players[1] = new HumanPlayer();
-		else
+		else {
 			players[1] = new ComputerPlayer();
+			System.out.print("Want to see all the steps of the game? (y / n) ");
+			String steps = new Scanner(System.in).nextLine().toLowerCase();
+			while ((1 != steps.length()) || (-1 == ("yn".indexOf(steps)))) {
+				System.out.print("Can't understand your answer. Want to see all the steps of the game? (y / n) ");
+				steps = new Scanner(System.in).nextLine().toLowerCase();
+			}
+            if (steps.equals("y"))
+                seeSteps = true;
+		}
 		players[0].setToken(Token.player1);
 		players[1].setToken(Token.player2);
 
@@ -46,6 +56,12 @@ public class VierGewinnt {
 		System.out.println("current player: " + currentPlayer);
 		int insertCol, insertRow; // starting from 0
 		while (!solved && !this.isBoardFull()) {
+            // Print step if wanted
+            if (seeSteps) {
+                System.out.print("Type in anything to see the next step.");
+                String unnecessary = new Scanner(System.in).nextLine().toLowerCase();
+                System.out.println(displayBoard(this.board));
+            }
 			// get player's next "move"
 			// note that we pass only a copy of the board as an argument,
 			// otherwise the player would be able to manipulate the board and cheat!
@@ -75,18 +91,18 @@ public class VierGewinnt {
 	 * @return the row where the token landed =======
 	 * @param column
 	 *            the column to insert the token
-	 * @param tok
+	 * @param token
 	 *            the players token
 	 * @return the row where the token landed >>>>>>> 9428b1405d73578c7e008901b97cccb1b1ba4c56
 	 */
-	private int insertToken(int column, Token tok) {
-		if ((column < 1) || (column > 7))
+	private int insertToken(int column, Token token) {
+		if ((column < 0) || (column > 7))
 			System.out.println("Please choose a column between 1 and " + COLS + "!");
 		else if (isColFull(column) == true)
 			System.out.println("Please choose a column which is not already full!");
 
 		int freeRow = colHeight(column);
-		board[column][freeRow] = tok;
+		board[column][freeRow] = token;
 
 		return freeRow;
 	}
