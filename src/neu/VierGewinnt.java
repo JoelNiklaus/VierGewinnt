@@ -81,6 +81,48 @@ public class VierGewinnt {
 			System.out.println("Draw! Game over.");
 	}
 
+	/** simulates a game and determines the winner given the players (must be 2 computerplayers, no human
+	 * players allowed!) */
+	public IPlayer getWinner(IPlayer firstPlayer, IPlayer secondPlayer) {
+		// initialize the board
+		for (Token[] column : this.board)
+			Arrays.fill(column, Token.empty);
+
+		/* initialize players */
+		players[0] = firstPlayer;
+		players[1] = secondPlayer;
+		players[0].setToken(Token.player1);
+		players[1].setToken(Token.player2);
+
+		/* play... */
+		boolean solved = false;
+		currentPlayer = 0; // firstPlayer begins
+		int insertCol, insertRow; // starting from 0
+		while (!solved && !this.isBoardFull()) {
+
+			// get player's next "move"
+			// note that we pass only a copy of the board as an argument,
+			// otherwise the player would be able to manipulate the board and cheat!
+			insertCol = players[currentPlayer].getNextColumn(getCopyOfBoard());
+			// insert the token and get the row where it landed
+			insertRow = this.insertToken(insertCol, players[currentPlayer].getToken());
+			//  check if the game is over
+			solved = this.checkVierGewinnt(insertCol, insertRow);
+			// switch to other player
+			if (!solved)
+				currentPlayer = (currentPlayer + 1) % 2;
+		}
+		System.out.println(displayBoard(this.board));
+		if (solved) {
+			System.out.println("Player " + players[currentPlayer].getToken() + " wins!");
+			return players[currentPlayer];
+		}
+		else {
+			System.out.println("Draw! Game over.");
+			return null;
+		}
+	}
+
 	/**
 	 * Inserts the token at the specified column (if possible) <<<<<<< HEAD
 	 *
