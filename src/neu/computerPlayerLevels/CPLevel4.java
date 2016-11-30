@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * ComputerPlayer level 1
  */
-public class CPLevel1 implements IPlayer {
+public class CPLevel4 implements IPlayer {
 
     public static final int COLS = 7;
     public static final int ROWS = 6;
@@ -39,6 +39,23 @@ public class CPLevel1 implements IPlayer {
 
         ArrayList<Integer> cols = deleteFullColumns();
 
+        if (firstTurn) {
+            // Starting Strategy
+            int numberOfTokensPlaced = getNumberOfTokensPlaced(board);
+            // I can start
+            if (numberOfTokensPlaced == 0)
+                return 3;
+            // first Turn but the opponent started
+            if (numberOfTokensPlaced == 1) {
+                // if opponent placed token in the middle
+                if (board[3][0] == opponentToken)
+                    return 4;
+                else
+                    return 3;
+            } else
+                firstTurn = false;
+        }
+
         // selbst siegen
         for (int col : cols) {
             Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
@@ -46,6 +63,24 @@ public class CPLevel1 implements IPlayer {
                     copiedBoard))
                 return col;
         }
+
+        // Gegner Sieg verhindern
+        for (int col : cols) {
+            Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard());
+            if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
+                    copiedBoard))
+                return col;
+        }
+
+        // Gegner Sieg in nächster Runde verhindern -> diese Kolonne sperren
+        for (int col : cols)
+            if (colHeight(col) < COLS - 2) {
+                Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
+                copiedBoard = insertToken(col, opponentToken, copiedBoard);
+                if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
+                        copiedBoard))
+                    colRating[col] = -1000;
+            }
 
         return getColWithBestRating(colRating, cols);
     }

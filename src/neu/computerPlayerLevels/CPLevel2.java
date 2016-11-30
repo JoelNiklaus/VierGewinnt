@@ -76,7 +76,6 @@ public class CPLevel2 implements IPlayer {
         return numberOfTokensPlaced;
     }
 
-    // TODO bei gleichem Rating zufällig auswählen
     private int getColWithBestRating(int[] colRating, ArrayList<Integer> cols) {
         int currentBestRating = Integer.MIN_VALUE;
         int currentBestCol = 3;
