@@ -1,13 +1,16 @@
-package computerPlayerLevels;
+package neu.computerPlayerLevels;
 
-
-import vierGewinnt.IPlayer;
-import vierGewinnt.Token;
+import neu.IPlayer;
+import neu.Token;
 
 import java.util.ArrayList;
 
+/* ************************************************************************* *\
+ *                Programmierung 1 HS 2016 - Serie 4-1                         *
+ \* ************************************************************************* */
+
 /**
- * ComputerPlayer level 5
+ * A not extremly stupid computer player any more
  */
 public class CPLevel5 implements IPlayer {
 
@@ -19,12 +22,11 @@ public class CPLevel5 implements IPlayer {
     public static final int THREE_OF_FOUR_OPPONENT = 10;
 
     private Token ownToken;
+    private Token opponentToken = null;
 
     private boolean firstTurn = true;
 
     private int[] colRating = new int[COLS];
-
-    private Token opponentToken = null;
 
     private ArrayList<Integer> cols;
 
@@ -37,15 +39,20 @@ public class CPLevel5 implements IPlayer {
     @Override
     public int getNextColumn(Token[][] board) {
         this.board = board;
-        Token opponentToken = getOtherToken();
-        int[] colRating = new int[COLS];
+
+        opponentToken = getOtherToken();
+
         colRating[3] = 3;
         colRating[2] = 2;
         colRating[4] = 2;
         colRating[1] = 1;
         colRating[5] = 1;
+        colRating[0] = 0;
+        colRating[6] = 0;
 
-        ArrayList<Integer> cols = deleteFullColumns();
+        cols = deleteFullColumns();
+
+        // TODO allgemein: zwei nebeneinander vom Gegner auf beiden seiten offen : daneben legen
 
         if (firstTurn) {
             // Starting Strategy
@@ -79,13 +86,13 @@ public class CPLevel5 implements IPlayer {
 
         // Gegner Sieg in übernächster Runde verhindern -> diese Kolonne setzen
         for (int col : cols)
-            if (colHeight(col) < ROWS) {
-                Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard());
+            if (colHeight(board, col) < ROWS) {
+                Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard(board));
                 int opponentWinCol = checkImmidiateFour(opponentToken, copiedBoard);
 
                 // if opponent could win, test this col
                 if (opponentWinCol >= 0)
-                    if (colHeight(opponentWinCol) < ROWS - 1) {
+                    if (colHeight(copiedBoard, opponentWinCol) < ROWS - 1) {
                         copiedBoard = insertToken(opponentWinCol, ownToken, copiedBoard);
                         copiedBoard = insertToken(opponentWinCol, opponentToken, copiedBoard);
 
@@ -96,12 +103,19 @@ public class CPLevel5 implements IPlayer {
                     }
             }
 
+
+        // if no col available just choose first one which is not full -> almost equal to resign
+        if (cols.isEmpty())
+            for (int col = 0; col < COLS; col++)
+                if (!isColFull(board, col))
+                    return col;
+
         return getColWithBestRating(colRating, cols);
     }
 
     private int checkImmidiateFour(Token player, Token[][] board) {
         for (int col : cols)
-            if (colHeight(col) < ROWS) {
+            if (colHeight(board, col) < ROWS) {
                 Token[][] copiedBoard = insertToken(col, player, getCopyOfBoard(board));
                 if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, player,
                         copiedBoard))
@@ -117,8 +131,8 @@ public class CPLevel5 implements IPlayer {
         else
             ratingIncrease = THREE_OF_FOUR_OWN;
         for (int col : cols)
-            if (colHeight(col) < ROWS) {
-                Token[][] copiedBoard = insertToken(col, player, getCopyOfBoard());
+            if (colHeight(board, col) < ROWS) {
+                Token[][] copiedBoard = insertToken(col, player, getCopyOfBoard(board));
                 if (checkPossibleGoodScore(col, colHeight(copiedBoard, col) - 1, player,
                         copiedBoard))
                     colRating[col] += ratingIncrease;
@@ -128,7 +142,7 @@ public class CPLevel5 implements IPlayer {
     private void destroyOpponentWinInNextRound(Token[][] board) {
         int column = -1;
         for (int col : cols)
-            if (colHeight(col) < ROWS - 1) {
+            if (colHeight(board, col) < ROWS - 1) {
                 Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard(board));
                 copiedBoard = insertToken(col, opponentToken, copiedBoard);
                 if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
@@ -166,7 +180,7 @@ public class CPLevel5 implements IPlayer {
     private ArrayList<Integer> deleteFullColumns() {
         ArrayList<Integer> cols = new ArrayList<Integer>();
         for (int col = 0; col < COLS; col++)
-            if (!isColFull(col))
+            if (!isColFull(board, col))
                 cols.add(col);
         return cols;
     }
@@ -180,14 +194,6 @@ public class CPLevel5 implements IPlayer {
         return otherToken;
     }
 
-    private Token[][] getCopyOfBoard() {
-        Token[][] copiedBoard = new Token[COLS][ROWS];
-        for (int i = 0; i < copiedBoard.length; i++)
-            for (int j = 0; j < copiedBoard[i].length; j++)
-                copiedBoard[i][j] = this.board[i][j];
-        return copiedBoard;
-    }
-
     private Token[][] getCopyOfBoard(Token[][] board) {
         Token[][] copiedBoard = new Token[COLS][ROWS];
         for (int i = 0; i < copiedBoard.length; i++)
@@ -197,19 +203,15 @@ public class CPLevel5 implements IPlayer {
     }
 
     private Token[][] insertToken(int column, Token token, Token[][] board) {
-        if ((column < 0) || (column > COLS - 1))
+        if ((column < 0) || (column > 7))
             System.out.println("Please choose a column between 1 and " + COLS + "!");
-        else if (isColFull(column) == true)
+        else if (isColFull(board, column) == true)
             System.out.println("Please choose a column which is not already full!");
 
         int freeRow = colHeight(board, column);
         board[column][freeRow] = token;
 
         return board;
-    }
-
-    private boolean isColFull(int col) {
-        return isColFull(this.board, col);
     }
 
     /**
@@ -220,13 +222,8 @@ public class CPLevel5 implements IPlayer {
         return (board[col][topRow] != Token.empty);
     }
 
-    private int colHeight(int col) {
-        return colHeight(this.board, col);
-    }
-
     private static int colHeight(Token[][] board, int col) {
         int freeRow = 0;
-
         while (freeRow < ROWS) {
             if (board[col][freeRow] == Token.empty)
                 break;
@@ -384,6 +381,6 @@ public class CPLevel5 implements IPlayer {
 
     @Override
     public String getPlayersName() {
-        return "Random Player";
+        return "Captain Awesome";
     }
 }
