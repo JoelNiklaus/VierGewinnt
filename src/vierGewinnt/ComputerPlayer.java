@@ -1,4 +1,4 @@
-package neu;
+package vierGewinnt;
 
 import java.util.ArrayList;
 
