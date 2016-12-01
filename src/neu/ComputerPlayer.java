@@ -14,7 +14,8 @@ public class ComputerPlayer implements IPlayer {
 	public static final int COLS = 7;
 	public static final int ROWS = 6;
 	public static final int WINNING_SCORE = 4;
-	public static final int GOOD_SCORE = 3;
+
+	public static final int THREE_OF_FOUR = 10;
 
 	private Token ownToken;
 	
@@ -22,7 +23,9 @@ public class ComputerPlayer implements IPlayer {
 
 	private int[] colRating = new int[COLS];
 	
-	Token opponentToken = null;
+	private Token opponentToken = null;
+
+	private ArrayList<Integer> cols;
 
 	private Token[][] board;
 	
@@ -42,7 +45,7 @@ public class ComputerPlayer implements IPlayer {
 		colRating[1] = 1;
 		colRating[5] = 1;
 
-		ArrayList<Integer> cols = deleteFullColumns();
+		cols = deleteFullColumns();
 		
 		// TODO allgemein: zwei nebeneinander vom Gegner auf beiden seiten offen : daneben legen
 		
@@ -73,18 +76,18 @@ public class ComputerPlayer implements IPlayer {
 			}
 
 		// Gegner Sieg verhindern
-		int column = destroyOpponentWinImmediate(cols, board);
+		int column = destroyOpponentWinImmediate(board);
 		if (column >= 0)
 			return column;
 
 		// Gegner Sieg in nächster Runde verhindern -> diese Kolonne sperren
-		destroyOpponentWinInNextRound(cols, board);
+		destroyOpponentWinInNextRound(board);
 
 		// Gegner Sieg in übernächster Runde verhindern -> diese Kolonne setzen
 		for (int col : cols)
 			if (colHeight(col) < COLS - 1) {
 				Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard());
-				int opponentWinCol = destroyOpponentWinImmediate(cols, copiedBoard);
+				int opponentWinCol = destroyOpponentWinImmediate(copiedBoard);
 
 				// if opponent could win, test this col
 				if (opponentWinCol >= 0)
@@ -95,7 +98,8 @@ public class ComputerPlayer implements IPlayer {
 						if (checkPossibleVierGewinnt(opponentWinCol,
 								colHeight(copiedBoard, opponentWinCol) - 1, opponentToken,
 								copiedBoard))
-							colRating[col] += 100;
+							return col;
+						colRating[col] += 100;
 					}
 			}
 		
@@ -106,7 +110,7 @@ public class ComputerPlayer implements IPlayer {
 				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
 				if (checkPossibleGoodScore(col, colHeight(copiedBoard, col) - 1, ownToken,
 						copiedBoard))
-					colRating[col] += 10;
+					colRating[col] += THREE_OF_FOUR;
 			}
 		
 		// TODO 3 nacheinander von gegner verhindern
@@ -117,7 +121,7 @@ public class ComputerPlayer implements IPlayer {
 		return getColWithBestRating(colRating, cols);
 	}
 	
-	private int destroyOpponentWinImmediate(ArrayList<Integer> cols, Token[][] board) {
+	private int destroyOpponentWinImmediate(Token[][] board) {
 		for (int col : cols)
 			// TODO not all is recognized
 			if (colHeight(col) < COLS - 2) {
@@ -129,14 +133,14 @@ public class ComputerPlayer implements IPlayer {
 		return -1;
 	}
 	
-	private void destroyOpponentWinInNextRound(ArrayList<Integer> cols, Token[][] board) {
+	private void destroyOpponentWinInNextRound(Token[][] board) {
 		for (int col : cols)
 			if (colHeight(col) < COLS - 2) {
 				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard(board));
 				copiedBoard = insertToken(col, opponentToken, copiedBoard);
 				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
 						copiedBoard))
-					colRating[col] = -1000;
+					cols.remove(col);
 			}
 	}
 
@@ -239,16 +243,16 @@ public class ComputerPlayer implements IPlayer {
 	private boolean checkPossibleVierGewinnt(int col, int row, Token player, Token[][] board) {
 		Runner runner = new Runner(board, col, row, player);
 		// vertical
-		if (runner.run(0, 1) >= WINNING_SCORE)
+		if (runner.zeroEmptyRun(0, 1) >= WINNING_SCORE)
 			return true;
 		// horizontal
-		if (runner.run(1, 0) >= WINNING_SCORE)
+		if (runner.zeroEmptyRun(1, 0) >= WINNING_SCORE)
 			return true;
 		// diagonal right up
-		if (runner.run(1, 1) >= WINNING_SCORE)
+		if (runner.zeroEmptyRun(1, 1) >= WINNING_SCORE)
 			return true;
 		// diagonal left up
-		if (runner.run(1, -1) >= WINNING_SCORE)
+		if (runner.zeroEmptyRun(1, -1) >= WINNING_SCORE)
 			return true;
 		
 		return false;
@@ -257,21 +261,23 @@ public class ComputerPlayer implements IPlayer {
 	private boolean checkPossibleGoodScore(int col, int row, Token player, Token[][] board) {
 		Runner runner = new Runner(board, col, row, player);
 		// vertical
-		if (runner.run(0, 1) == GOOD_SCORE)
+		if (runner.oneEmptyRun(0, 1) >= WINNING_SCORE || runner.oneEmptyRun(0, -1) >= WINNING_SCORE)
 			return true;
 		// horizontal
-		if (runner.run(1, 0) == GOOD_SCORE)
+		if (runner.oneEmptyRun(1, 0) >= WINNING_SCORE || runner.oneEmptyRun(-1, 0) >= WINNING_SCORE)
 			return true;
 		// diagonal right up
-		if (runner.run(1, 1) == GOOD_SCORE)
+		if (runner.oneEmptyRun(1, 1) >= WINNING_SCORE
+				|| runner.oneEmptyRun(-1, -1) >= WINNING_SCORE)
 			return true;
 		// diagonal left up
-		if (runner.run(1, -1) == GOOD_SCORE)
+		if (runner.oneEmptyRun(1, -1) >= WINNING_SCORE
+				|| runner.oneEmptyRun(-1, 1) >= WINNING_SCORE)
 			return true;
 		
 		return false;
 	}
-	
+
 	/**
 	 * @return true if the column col is already full and false otherwise.
 	 */
@@ -286,6 +292,7 @@ public class ComputerPlayer implements IPlayer {
 		int homeCol, homeRow;
 		int col = 0, row = 0;
 		Token player;
+		int emptyScore = 0;
 		
 		public Runner(Token[][] board, int homeCol, int homeRow, Token player) {
 			this.board = board;
@@ -294,7 +301,20 @@ public class ComputerPlayer implements IPlayer {
 			this.player = player;
 		}
 		
-		public int run(int dcol, int drow) {
+		// three player's tokens and one empty token
+		public int oneEmptyRun(int dcol, int drow) {
+			emptyScore = 0;
+			int score = 1;
+			this.goHome();
+			score += this.forwardRun(dcol, drow);
+			this.goHome();
+			score += this.reverseRun(dcol, drow);
+			return score;
+		}
+		
+		// only player's token
+		public int zeroEmptyRun(int dcol, int drow) {
+			emptyScore = 1;
 			int score = 1;
 			this.goHome();
 			score += this.forwardRun(dcol, drow);
@@ -318,21 +338,24 @@ public class ComputerPlayer implements IPlayer {
 				return 0;
 			if (this.samePlayer())
 				return 1 + this.forwardRun(dcol, drow);
-			else
+
+			if (this.emptyField() && emptyScore == 0) {
+				emptyScore++;
+				return 1 + this.forwardRun(dcol, drow);
+			} else
 				return 0;
 		}
 
 		private boolean outOfBounds() {
-			if (col < 0 || row < 0 || col >= COLS || row >= ROWS)
-				return true;
-			return false;
+			return (col < 0 || row < 0 || col >= COLS || row >= ROWS);
 		}
 
 		private boolean samePlayer() {
-			if (board[col][row].equals(player))
-				return true;
-			else
-				return false;
+			return (board[col][row].equals(player));
+		}
+		
+		private boolean emptyField() {
+			return (board[col][row].equals(Token.empty));
 		}
 
 		private void move(int dcol, int drow) {
