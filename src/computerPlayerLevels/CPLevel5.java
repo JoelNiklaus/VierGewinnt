@@ -1,7 +1,7 @@
-package neu.computerPlayerLevels;
+package computerPlayerLevels;
 
-import neu.IPlayer;
-import neu.Token;
+import vierGewinnt.IPlayer;
+import vierGewinnt.Token;
 
 import java.util.ArrayList;
 
@@ -203,8 +203,8 @@ public class CPLevel5 implements IPlayer {
     }
 
     private Token[][] insertToken(int column, Token token, Token[][] board) {
-        if ((column < 0) || (column > 7))
-            System.out.println("Please choose a column between 1 and " + COLS + "!");
+		if ((column < 0) || (column > COLS - 1))
+			System.out.println("Please choose a column between 1 and " + COLS + "!");
         else if (isColFull(board, column) == true)
             System.out.println("Please choose a column which is not already full!");
 
