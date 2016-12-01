@@ -15,8 +15,9 @@ public class ComputerPlayer implements IPlayer {
 	public static final int ROWS = 6;
 	public static final int WINNING_SCORE = 4;
 	
-	public static final int THREE_OF_FOUR = 10;
-	
+	public static final int THREE_OF_FOUR_OWN = 20;
+	public static final int THREE_OF_FOUR_OPPONENT = 10;
+
 	private Token ownToken;
 
 	private boolean firstTurn = true;
@@ -69,16 +70,12 @@ public class ComputerPlayer implements IPlayer {
 		}
 
 		// selbst siegen
-		for (int col : cols)
-			if (colHeight(col) < COLS - 1) {
-				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
-				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, ownToken,
-						copiedBoard))
-					return col;
-			}
+		int column = checkImmidiateFour(ownToken, board);
+		if (column >= 0)
+			return column;
 		
 		// Gegner Sieg verhindern
-		int column = destroyOpponentWinImmediate(board);
+		column = checkImmidiateFour(opponentToken, board);
 		if (column >= 0)
 			return column;
 		
@@ -87,13 +84,13 @@ public class ComputerPlayer implements IPlayer {
 		
 		// Gegner Sieg in übernächster Runde verhindern -> diese Kolonne setzen
 		for (int col : cols)
-			if (colHeight(col) < COLS - 1) {
+			if (colHeight(col) < ROWS - 1) {
 				Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard());
-				int opponentWinCol = destroyOpponentWinImmediate(copiedBoard);
+				int opponentWinCol = checkImmidiateFour(opponentToken, copiedBoard);
 				
 				// if opponent could win, test this col
 				if (opponentWinCol >= 0)
-					if (colHeight(opponentWinCol) < COLS - 2) {
+					if (colHeight(opponentWinCol) < ROWS - 2) {
 						copiedBoard = insertToken(opponentWinCol, ownToken, copiedBoard);
 						copiedBoard = insertToken(opponentWinCol, opponentToken, copiedBoard);
 
@@ -105,28 +102,51 @@ public class ComputerPlayer implements IPlayer {
 					}
 			}
 
-		// 3 nacheinander versuchen
+		// 4 Gewinnt mit einem Fehlenden selber versuchen
 		// TODO wenn nicht möglich zu gewinnen egal
-		for (int col : cols)
-			if (colHeight(col) < COLS - 1) {
-				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
-				if (checkPossibleGoodScore(col, colHeight(copiedBoard, col) - 1, ownToken,
-						copiedBoard))
-					colRating[col] += THREE_OF_FOUR;
-			}
+		checkThreeOfFour(ownToken);
 
+		// 4 Gewinnt mit einem Fehlenden Gegner verhindern versuchen
 		// TODO 3 nacheinander von gegner verhindern
+		checkThreeOfFour(opponentToken);
 		
 		for (int rating : colRating)
 			System.out.println(rating);
 
+		// if no col available just choose first one which is not full -> almost equal to resign
+		if (cols.isEmpty())
+			for (int col = 0; col < COLS; col++)
+				if (!isColFull(col))
+					return col;
+
 		return getColWithBestRating(colRating, cols);
+	}
+
+	private int checkImmidiateFour(Token player, Token[][] board) {
+		for (int col : cols)
+			if (colHeight(col) < ROWS - 1) {
+				Token[][] copiedBoard = insertToken(col, player, getCopyOfBoard(board));
+				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, player,
+						copiedBoard))
+					return col;
+			}
+		return -1;
+	}
+
+	private void checkThreeOfFour(Token player) {
+		for (int col : cols)
+			if (colHeight(col) < ROWS - 1) {
+				Token[][] copiedBoard = insertToken(col, player, getCopyOfBoard());
+				if (checkPossibleGoodScore(col, colHeight(copiedBoard, col) - 1, player,
+						copiedBoard))
+					colRating[col] += THREE_OF_FOUR_OPPONENT;
+			}
 	}
 
 	private int destroyOpponentWinImmediate(Token[][] board) {
 		for (int col : cols)
 			// TODO not all is recognized
-			if (colHeight(col) < COLS - 2) {
+			if (colHeight(col) < ROWS - 2) {
 				Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard(board));
 				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
 						copiedBoard))
@@ -138,7 +158,7 @@ public class ComputerPlayer implements IPlayer {
 	private void destroyOpponentWinInNextRound(Token[][] board) {
 		int column = -1;
 		for (int col : cols)
-			if (colHeight(col) < COLS - 2) {
+			if (colHeight(col) < ROWS - 2) {
 				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard(board));
 				copiedBoard = insertToken(col, opponentToken, copiedBoard);
 				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
