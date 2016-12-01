@@ -158,7 +158,7 @@ public class ComputerPlayer implements IPlayer {
 					column = col;
 			}
 		if (column > -1)
-			cols.remove(column);
+			cols.remove(Integer.valueOf(column));
 	}
 
 	private int getNumberOfTokensPlaced(Token[][] board) {
