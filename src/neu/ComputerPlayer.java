@@ -9,6 +9,8 @@ import java.util.ArrayList;
 /** A very stupid computer player */
 public class ComputerPlayer implements IPlayer {
 
+	// TODO problem with colHeight
+	
 	public static final int COLS = 7;
 	public static final int ROWS = 6;
 	public static final int WINNING_SCORE = 4;
@@ -17,6 +19,10 @@ public class ComputerPlayer implements IPlayer {
 	private Token ownToken;
 	
 	private boolean firstTurn = true;
+
+	private int[] colRating = new int[COLS];
+	
+	Token opponentToken = null;
 
 	private Token[][] board;
 	
@@ -27,8 +33,9 @@ public class ComputerPlayer implements IPlayer {
 	@Override
 	public int getNextColumn(Token[][] board) {
 		this.board = board;
-		Token opponentToken = getOtherToken();
-		int[] colRating = new int[COLS];
+
+		opponentToken = getOtherToken();
+
 		colRating[3] = 3;
 		colRating[2] = 2;
 		colRating[4] = 2;
@@ -36,6 +43,8 @@ public class ComputerPlayer implements IPlayer {
 		colRating[5] = 1;
 
 		ArrayList<Integer> cols = deleteFullColumns();
+		
+		// TODO allgemein: zwei nebeneinander vom Gegner auf beiden seiten offen : daneben legen
 		
 		if (firstTurn) {
 			// Starting Strategy
@@ -55,40 +64,80 @@ public class ComputerPlayer implements IPlayer {
 		}
 		
 		// selbst siegen
-		for (int col : cols) {
-			Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
-			if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, ownToken,
-					copiedBoard))
-				return col;
-		}
+		for (int col : cols)
+			if (colHeight(col) < COLS - 1) {
+				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
+				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, ownToken,
+						copiedBoard))
+					return col;
+			}
 
 		// Gegner Sieg verhindern
-		for (int col : cols) {
-			Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard());
-			if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
-					copiedBoard))
-				return col;
-		}
+		int column = destroyOpponentWinImmediate(cols, board);
+		if (column >= 0)
+			return column;
 
 		// Gegner Sieg in nächster Runde verhindern -> diese Kolonne sperren
-		// TODO
+		destroyOpponentWinInNextRound(cols, board);
+
+		// Gegner Sieg in übernächster Runde verhindern -> diese Kolonne setzen
+		for (int col : cols)
+			if (colHeight(col) < COLS - 1) {
+				Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard());
+				int opponentWinCol = destroyOpponentWinImmediate(cols, copiedBoard);
+
+				// if opponent could win, test this col
+				if (opponentWinCol >= 0)
+					if (colHeight(opponentWinCol) < COLS - 2) {
+						copiedBoard = insertToken(opponentWinCol, ownToken, copiedBoard);
+						copiedBoard = insertToken(opponentWinCol, opponentToken, copiedBoard);
+						
+						if (checkPossibleVierGewinnt(opponentWinCol,
+								colHeight(copiedBoard, opponentWinCol) - 1, opponentToken,
+								copiedBoard))
+							colRating[col] += 100;
+					}
+			}
+		
+		// 3 nacheinander versuchen
+		// TODO wenn nicht möglich zu gewinnen egal
+		for (int col : cols)
+			if (colHeight(col) < COLS - 1) {
+				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
+				if (checkPossibleGoodScore(col, colHeight(copiedBoard, col) - 1, ownToken,
+						copiedBoard))
+					colRating[col] += 10;
+			}
+		
+		// TODO 3 nacheinander von gegner verhindern
+
+		for (int rating : colRating)
+			System.out.println(rating);
+		
+		return getColWithBestRating(colRating, cols);
+	}
+	
+	private int destroyOpponentWinImmediate(ArrayList<Integer> cols, Token[][] board) {
+		for (int col : cols)
+			// TODO not all is recognized
+			if (colHeight(col) < COLS - 2) {
+				Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard(board));
+				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
+						copiedBoard))
+					return col;
+			}
+		return -1;
+	}
+	
+	private void destroyOpponentWinInNextRound(ArrayList<Integer> cols, Token[][] board) {
 		for (int col : cols)
 			if (colHeight(col) < COLS - 2) {
-				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
+				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard(board));
 				copiedBoard = insertToken(col, opponentToken, copiedBoard);
 				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
 						copiedBoard))
 					colRating[col] = -1000;
 			}
-		
-		// 3 nacheinander versuchen
-		for (int col : cols) {
-			Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard());
-			if (checkPossibleGoodScore(col, colHeight(copiedBoard, col) - 1, ownToken, copiedBoard))
-				colRating[col] += 10;
-		}
-		
-		return getColWithBestRating(colRating, cols);
 	}
 
 	private int getNumberOfTokensPlaced(Token[][] board) {
@@ -100,7 +149,6 @@ public class ComputerPlayer implements IPlayer {
 		return numberOfTokensPlaced;
 	}
 
-	// TODO bei gleichem Rating zufällig auswählen
 	private int getColWithBestRating(int[] colRating, ArrayList<Integer> cols) {
 		int currentBestRating = Integer.MIN_VALUE;
 		int currentBestCol = 3;
@@ -109,6 +157,10 @@ public class ComputerPlayer implements IPlayer {
 				currentBestCol = col;
 				currentBestRating = colRating[col];
 			}
+		for (int col : cols)
+			if (colRating[col] == currentBestRating)
+				if (Math.random() < 0.5)
+					return col;
 		return currentBestCol;
 	}
 
