@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 /**
  * A not extremly stupid computer player any more
+ *
+ * by Elio Fritschi
  */
 public class ComputerPlayer implements IPlayer {
 	
@@ -37,7 +39,7 @@ public class ComputerPlayer implements IPlayer {
 	public int getNextColumn(Token[][] board) {
 		this.board = board;
 
-		opponentToken = getOtherToken();
+		opponentToken = getOtherToken(ownToken);
 
 		colRating[3] = 3;
 		colRating[2] = 2;
@@ -79,7 +81,10 @@ public class ComputerPlayer implements IPlayer {
 			return column;
 
 		// Gegner Sieg in nächster Runde verhindern -> diese Kolonne sperren
-		destroyOpponentWinInNextRound(board);
+		checkWinInNextRound(opponentToken, board);
+
+		// Eigenen Sieg nicht verbauen -> diese Kolonne sperren
+		checkWinInNextRound(ownToken, board);
 
 		// Gegner Sieg in übernächster Runde verhindern -> diese Kolonne setzen
 		for (int col : cols)
@@ -143,14 +148,14 @@ public class ComputerPlayer implements IPlayer {
 					colRating[col] += ratingIncrease;
 			}
 	}
-	
-	private void destroyOpponentWinInNextRound(Token[][] board) {
+
+	private void checkWinInNextRound(Token player, Token[][] board) {
 		int column = -1;
 		for (int col : cols)
 			if (colHeight(board, col) < ROWS - 1) {
-				Token[][] copiedBoard = insertToken(col, ownToken, getCopyOfBoard(board));
-				copiedBoard = insertToken(col, opponentToken, copiedBoard);
-				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, opponentToken,
+				Token[][] copiedBoard = insertToken(col, getOtherToken(player), getCopyOfBoard(board));
+				copiedBoard = insertToken(col, player, copiedBoard);
+				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, player,
 						copiedBoard))
 					column = col;
 			}
@@ -189,10 +194,10 @@ public class ComputerPlayer implements IPlayer {
 				cols.add(col);
 		return cols;
 	}
-	
-	private Token getOtherToken() {
+
+	private Token getOtherToken(Token token) {
 		Token otherToken;
-		if (ownToken.toString().equals("X"))
+		if (token.toString().equals("X"))
 			otherToken = Token.player1;
 		else
 			otherToken = Token.player2;
