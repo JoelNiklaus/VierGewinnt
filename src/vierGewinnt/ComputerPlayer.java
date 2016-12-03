@@ -241,6 +241,10 @@ public class ComputerPlayer implements IPlayer {
 		}
 		return freeRow;
 	}
+
+	private static boolean possibleToPutToken(Token[][] board, int col, int row) {
+		return row == colHeight(board, col);
+	}
 	
 	private boolean checkPossibleVierGewinnt(int col, int row, Token player, Token[][] board) {
 		Runner runner = new Runner(board, col, row, player);

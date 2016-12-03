@@ -20,7 +20,7 @@ public abstract class AbstractComputerPlayerTest {
 
 	protected VierGewinnt game = new VierGewinnt();
 
-	public static final int NUMBER_OF_TESTS = 500;
+	public static final int NUMBER_OF_TESTS = 2000;
 	public static final double WINNING_PERCENTAGE = 0.5;
 	public static final double LOSING_PERCENTAGE = 0.01;
 
