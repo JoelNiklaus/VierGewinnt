@@ -1,5 +1,7 @@
-package tests;
+package tests.computerPlayer;
 
+import computerPlayerLevels.CPLevel5;
+import computerPlayerLevels.CPLevel6;
 import computerPlayerLevels.CPLevel8;
 import org.junit.Test;
 import vierGewinnt.ComputerPlayer;
@@ -12,20 +14,20 @@ import static org.junit.Assert.assertNotEquals;
 /**
  * Tests the computerPlayer against CPLevel7
  */
-public class ComputerPlayerTestCurrent {
+public class ComputerPlayerTestLevel8 {
 	IPlayer favorite = new ComputerPlayer();
-	IPlayer opponent = new ComputerPlayer();
+	IPlayer opponent = new CPLevel8();
 
 	// as firstPlayer
 	@Test
-	public void testDoesNotLoseAgainstCurrentasFirstPlayer() throws Exception {
+	public void testDoesNotLoseAgainstLvl8asFirstPlayer() throws Exception {
 		VierGewinnt game = new VierGewinnt();
 
 		assertNotEquals(opponent, game.getWinner(favorite, opponent));
 	}
 
 	@Test
-	public void testWinsAgainstCurrentasFirstPlayer() throws Exception {
+	public void testWinsAgainstLvl8asFirstPlayer() throws Exception {
 		VierGewinnt game = new VierGewinnt();
 
 		assertEquals(favorite, game.getWinner(favorite, opponent));
@@ -33,14 +35,14 @@ public class ComputerPlayerTestCurrent {
 
 	// as secondPlayer
 	@Test
-	public void testDoesNotLoseAgainstCurrentasSecondPlayer() throws Exception {
+	public void testDoesNotLoseAgainstLvl8asSecondPlayer() throws Exception {
 		VierGewinnt game = new VierGewinnt();
 
 		assertNotEquals(opponent, game.getWinner(opponent, favorite));
 	}
 
 	@Test
-	public void testWinsAgainstCurrentasSecondPlayer() throws Exception {
+	public void testWinsAgainstLvl8asSecondPlayer() throws Exception {
 		VierGewinnt game = new VierGewinnt();
 
 		assertEquals(favorite, game.getWinner(opponent, favorite));

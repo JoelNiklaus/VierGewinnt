@@ -1,18 +1,17 @@
-package tests;
+package tests.multipleTests;
 
-import computerPlayerLevels.CPLevel7;
-import computerPlayerLevels.CPLevel8;
 import org.junit.Before;
 import org.junit.Test;
+import vierGewinnt.ComputerPlayer;
 
 /**
  * Created by joelniklaus on 03.12.16.
  */
-public class MultipleTestsLevel8 extends AbstractComputerPlayerTest {
+public class MultipleTestsCurrent extends AbstractComputerPlayerTest {
 
 	@Before
 	public void setUp() {
-		this.opponent = new CPLevel8();
+		this.opponent = new ComputerPlayer();
 	}
 
 	@Test

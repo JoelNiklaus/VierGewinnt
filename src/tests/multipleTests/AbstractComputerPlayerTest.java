@@ -1,4 +1,4 @@
-package tests;
+package tests.multipleTests;
 
 import computerPlayerLevels.CPLevel1;
 import computerPlayerLevels.CPLevel6;

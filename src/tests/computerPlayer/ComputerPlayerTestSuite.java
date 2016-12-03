@@ -1,4 +1,4 @@
-package tests;
+package tests.computerPlayer;
 
 import org.junit.runners.Suite;
 import org.junit.runner.RunWith;

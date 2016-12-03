@@ -1,19 +1,20 @@
-package tests;
+package tests.computerPlayer;
 
 import vierGewinnt.ComputerPlayer;
 import vierGewinnt.IPlayer;
 import vierGewinnt.VierGewinnt;
-import computerPlayerLevels.CPLevel1;
+import computerPlayerLevels.CPLevel4;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
- * Tests the computerPlayer against CPLevel1
+ * Tests the computerPlayer against CPLevel2
  */
-public class ComputerPlayerTestLevel1 {
+public class ComputerPlayerTestLevel4 {
     IPlayer favorite = new ComputerPlayer();
-    IPlayer opponent = new CPLevel1();
+    IPlayer opponent = new CPLevel4();
 
     // as firstPlayer
     @Test
