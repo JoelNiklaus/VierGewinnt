@@ -116,13 +116,13 @@ public class VierGewinnt {
 			if (!solved)
 				currentPlayer = (currentPlayer + 1) % 2;
 		}
-		System.out.println(displayBoard(this.board));
+		//System.out.println(displayBoard(this.board));
 		if (solved) {
-			System.out.println("Player " + players[currentPlayer].getToken() + " wins!");
+			//System.out.println("Player " + players[currentPlayer].getToken() + " wins!");
 			return players[currentPlayer];
 		} else {
-			System.out.println("Draw! Game over.");
-			return null;
+			//System.out.println("Draw! Game over.");
+			return new NullPlayer();
 		}
 	}
 	

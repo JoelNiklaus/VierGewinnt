@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ComputerPlayerTestLevel1.class, ComputerPlayerTestLevel2.class, ComputerPlayerTestLevel3.class,
-ComputerPlayerTestLevel4.class, ComputerPlayerTestLevel5.class})
+		ComputerPlayerTestLevel4.class, ComputerPlayerTestLevel5.class, ComputerPlayerTestLevel6.class, ComputerPlayerTestLevel7.class, ComputerPlayerTestLevel8.class, ComputerPlayerTestCurrent.class})
 public class ComputerPlayerTestSuite {
 
 
