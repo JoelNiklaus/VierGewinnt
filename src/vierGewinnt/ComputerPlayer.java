@@ -20,6 +20,13 @@ public class ComputerPlayer implements IPlayer {
 	public static final int THREE_OF_FOUR_OWN = 20;
 	public static final int THREE_OF_FOUR_OPPONENT = 10;
 
+	public static final int BLOCK_COL_OPPONENT_WIN = -1000;
+	public static final int BLOCK_COL_OWN_WIN = -500;
+
+	public static final int SAVE_OWN_WIN_IN_TWO_ROUNDS = 750;
+	public static final int SAVE_OPPONENT_WIN_IN_TWO_ROUNDS = 250;
+
+
 	private Token ownToken;
 	private Token opponentToken = null;
 
@@ -93,23 +100,30 @@ public class ComputerPlayer implements IPlayer {
 		checkWinInNextRound(ownToken, board);
 
 		// Gegner Sieg in übernächster Runde verhindern -> diese Kolonne setzen
-		for (int col : cols)
-			if (colHeight(board, col) < ROWS) {
-				Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard(board));
-				int opponentWinCol = checkImmidiateFour(opponentToken, copiedBoard);
 
-				// if opponent could win, test this col
-				if (opponentWinCol >= 0)
-					if (colHeight(copiedBoard, opponentWinCol) < ROWS - 1) {
-						copiedBoard = insertToken(opponentWinCol, ownToken, copiedBoard);
-						copiedBoard = insertToken(opponentWinCol, opponentToken, copiedBoard);
 
-						if (checkPossibleVierGewinnt(opponentWinCol,
-								colHeight(copiedBoard, opponentWinCol) - 1, opponentToken,
-								copiedBoard))
-							return col;
-					}
-			}
+/*			for (int col : cols)
+				if (colHeight(board, col) < ROWS) {
+					Token[][] copiedBoard = insertToken(col, opponentToken, getCopyOfBoard(board));
+					int opponentWinCol = checkImmidiateFour(opponentToken, copiedBoard);
+
+					// if opponent could win, test this col
+					if (opponentWinCol >= 0)
+						if (colHeight(copiedBoard, opponentWinCol) < ROWS - 1) {
+							copiedBoard = insertToken(opponentWinCol, ownToken, copiedBoard);
+							copiedBoard = insertToken(opponentWinCol, opponentToken, copiedBoard);
+
+							if (checkPossibleVierGewinnt(opponentWinCol,
+									colHeight(copiedBoard, opponentWinCol) - 1, opponentToken,
+									copiedBoard))
+								return col;
+						}
+				}
+				*/
+
+
+		// TODO optimize here
+		// TODO look more rounds into the future! we indirectly harm ourselves e.g. by placing one over two of our own
 
 		// 4 Gewinnt mit einem Fehlenden selber versuchen
 		checkThreeOfFour(ownToken);
@@ -123,6 +137,7 @@ public class ComputerPlayer implements IPlayer {
 			else
 				System.out.println("X");
 
+
 		// if no col available just choose first one which is not full -> almost equal to resign
 		if (cols.isEmpty())
 			for (int col = 0; col < COLS; col++)
@@ -130,35 +145,6 @@ public class ComputerPlayer implements IPlayer {
 					return col;
 
 		return getColWithBestRating(colRating, cols);
-	}
-
-	/**
-	 * For each col does: Inserts one token. Then checks in how many cols the player can win.
-	 * If in more than 1 put token in this original col.
-	 * Else return -1
-	 *
-	 * @param player
-	 * @param board
-	 * @return
-	 */
-	private void checkWinInTwoRound(Token player, Token[][] board) {
-		ArrayList<Integer> winInTwoRoundsCols = new ArrayList<Integer>();
-		for (int originalCol : cols) {
-			Token[][] copiedBoard = insertToken(originalCol, player, getCopyOfBoard(board));
-			ArrayList<Integer> possWinningCols = deleteFullColumns(copiedBoard);
-			int possibleWinWays = 0;
-			for (int possWinCol : possWinningCols) {
-				Token[][] copiedBoard2 = insertToken(possWinCol, player, getCopyOfBoard(copiedBoard));
-				if (checkPossibleVierGewinnt(possWinCol, colHeight(copiedBoard2, possWinCol) - 1, player,
-						copiedBoard2)) {
-					possibleWinWays++;
-					if (possibleWinWays >= 2)
-						winInTwoRoundsCols.add(originalCol);
-				}
-			}
-		}
-		if (!winInTwoRoundsCols.isEmpty())
-			cols = winInTwoRoundsCols;
 	}
 
 	/**
@@ -177,6 +163,55 @@ public class ComputerPlayer implements IPlayer {
 		return -1;
 	}
 
+
+	private void checkWinInNextRound(Token player, Token[][] board) {
+		int ratingIncrease;
+		if (player.equals(opponentToken))
+			ratingIncrease = BLOCK_COL_OPPONENT_WIN;
+		else
+			ratingIncrease = BLOCK_COL_OWN_WIN;
+		for (int col : cols) {
+			if (colHeight(board, col) < ROWS - 1) {
+				Token[][] copiedBoard = insertToken(col, getOtherToken(player), getCopyOfBoard(board));
+				copiedBoard = insertToken(col, player, copiedBoard);
+				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, player,
+						copiedBoard))
+					colRating[col] += ratingIncrease;
+			}
+		}
+	}
+
+	/**
+	 * For each col does: Inserts one token. Then checks in how many cols the player can win.
+	 * If in more than 1 put token in this original col.
+	 * Else return -1
+	 *
+	 * @param player
+	 * @param board
+	 * @return
+	 */
+	private void checkWinInTwoRound(Token player, Token[][] board) {
+		int ratingIncrease;
+		if (player.equals(opponentToken))
+			ratingIncrease = THREE_OF_FOUR_OPPONENT;
+		else
+			ratingIncrease = THREE_OF_FOUR_OWN;
+		for (int originalCol : cols) {
+			Token[][] copiedBoard = insertToken(originalCol, player, getCopyOfBoard(board));
+			ArrayList<Integer> possWinningCols = deleteFullColumns(copiedBoard);
+			int possibleWinWays = 0;
+			for (int possWinCol : possWinningCols) {
+				Token[][] copiedBoard2 = insertToken(possWinCol, player, getCopyOfBoard(copiedBoard));
+				if (checkPossibleVierGewinnt(possWinCol, colHeight(copiedBoard2, possWinCol) - 1, player,
+						copiedBoard2)) {
+					possibleWinWays++;
+				}
+			}
+			if (possibleWinWays >= 2)
+				colRating[originalCol] += ratingIncrease;
+		}
+	}
+
 	private void checkThreeOfFour(Token player) {
 		int ratingIncrease;
 		if (player.equals(opponentToken))
@@ -192,19 +227,6 @@ public class ComputerPlayer implements IPlayer {
 			}
 	}
 
-	private void checkWinInNextRound(Token player, Token[][] board) {
-		ArrayList<Integer> colsToBlock = new ArrayList<>();
-		for (int col : cols) {
-			if (colHeight(board, col) < ROWS - 1) {
-				Token[][] copiedBoard = insertToken(col, getOtherToken(player), getCopyOfBoard(board));
-				copiedBoard = insertToken(col, player, copiedBoard);
-				if (checkPossibleVierGewinnt(col, colHeight(copiedBoard, col) - 1, player,
-						copiedBoard))
-					colsToBlock.add(col);
-			}
-		}
-		cols.removeAll(colsToBlock);
-	}
 
 	private int getNumberOfTokensPlaced(Token[][] board) {
 		int numberOfTokensPlaced = 0;

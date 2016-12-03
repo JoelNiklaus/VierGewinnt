@@ -4,6 +4,8 @@ package vierGewinnt;
  *                Programmierung 1 HS 2016 - Serie 4-1                         *
  \* ************************************************************************* */
 
+import computerPlayerLevels.CPLevel4;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -25,17 +27,18 @@ public class VierGewinnt {
 			Arrays.fill(column, Token.empty);
 
 		/* initialize players */
+		/*
 		players[0] = new ComputerPlayer();
 		boolean seeSteps = false;
 		System.out.print("Play yourself? (y / n) ");
 		String opponent = new Scanner(System.in).nextLine().toLowerCase();
 		while ((1 != opponent.length()) || (-1 == ("yn".indexOf(opponent)))) {
 			System.out
-			.print("Can't understand your answer. Play against a human opponent? (y / n) ");
+			.print("Can't understand your answer. Play against a cplevel4 opponent? (y / n) ");
 			opponent = new Scanner(System.in).nextLine().toLowerCase();
 		}
 		if (opponent.equals("y"))
-			players[1] = new HumanPlayer();
+			players[1] = new CPLevel4();
 		else {
 			players[1] = new ComputerPlayer();
 			System.out.print("Want to see all the steps of the game? (y / n) ");
@@ -48,12 +51,17 @@ public class VierGewinnt {
 			if (steps.equals("y"))
 				seeSteps = true;
 		}
+		*/
+		boolean seeSteps = true;
+
+		players[0] = new CPLevel4();
+		players[1] = new ComputerPlayer();
 		players[0].setToken(Token.player1);
 		players[1].setToken(Token.player2);
 
 		/* play... */
 		boolean solved = false;
-		currentPlayer = (new java.util.Random()).nextInt(2); // choose randomly who begins
+		currentPlayer = 0;//(new java.util.Random()).nextInt(2); // choose randomly who begins
 		System.out.println("current player: " + currentPlayer);
 		int insertCol, insertRow; // starting from 0
 		while (!solved && !this.isBoardFull()) {
