@@ -4,8 +4,6 @@ package vierGewinnt;
 \* ************************************************************************* */
 
 
-import java.util.Scanner;
-
 /**
  * Used to handle null Players in draw. Represents No Winner
  */

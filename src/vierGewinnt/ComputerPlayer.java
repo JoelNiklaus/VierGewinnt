@@ -49,7 +49,7 @@ public class ComputerPlayer implements IPlayer {
 		colRating[0] = 0;
 		colRating[6] = 0;
 
-		cols = deleteFullColumns();
+		cols = deleteFullColumns(this.board);
 		
 		// TODO allgemein: zwei nebeneinander vom Gegner auf beiden seiten offen : daneben legen
 		
@@ -83,6 +83,16 @@ public class ComputerPlayer implements IPlayer {
 		// Gegner Sieg in nächster Runde verhindern -> diese Kolonne sperren
 		checkWinInNextRound(opponentToken, board);
 
+        // Eigenen Sieg in übernächster Runde erschaffen
+        column = checkWinInTwoRound(ownToken, board);
+        if (column >= 0)
+            return column;
+
+        // Gegner Sieg in übernächster Runde verhindern
+        column = checkWinInTwoRound(opponentToken, board);
+        if (column >= 0)
+            return column;
+
 		// Eigenen Sieg nicht verbauen -> diese Kolonne sperren
 		checkWinInNextRound(ownToken, board);
 
@@ -97,7 +107,7 @@ public class ComputerPlayer implements IPlayer {
 					if (colHeight(copiedBoard, opponentWinCol) < ROWS - 1) {
 						copiedBoard = insertToken(opponentWinCol, ownToken, copiedBoard);
 						copiedBoard = insertToken(opponentWinCol, opponentToken, copiedBoard);
-						
+
 						if (checkPossibleVierGewinnt(opponentWinCol,
 								colHeight(copiedBoard, opponentWinCol) - 1, opponentToken,
 								copiedBoard))
@@ -122,8 +132,27 @@ public class ComputerPlayer implements IPlayer {
 		
 		return getColWithBestRating(colRating, cols);
 	}
-	
-	private int checkImmidiateFour(Token player, Token[][] board) {
+
+    private int checkWinInTwoRound(Token player, Token[][] board) {
+        for (int originalCol:cols)
+        {
+            Token[][] copiedBoard = insertToken(originalCol, player, getCopyOfBoard(board));
+            ArrayList<Integer> possWinningCols = deleteFullColumns(copiedBoard);
+            int possibleWinWays = 0;
+            for (int possWinCol:possWinningCols) {
+                Token[][] copiedBoard2 = insertToken(possWinCol, player, getCopyOfBoard(copiedBoard));
+                if (checkPossibleVierGewinnt(possWinCol, colHeight(copiedBoard2, possWinCol) - 1, player,
+                        copiedBoard2)) {
+                    possibleWinWays++;
+                    if (possibleWinWays >= 2)
+                        return originalCol;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int checkImmidiateFour(Token player, Token[][] board) {
 		for (int col : cols)
 			if (colHeight(board, col) < ROWS) {
 				Token[][] copiedBoard = insertToken(col, player, getCopyOfBoard(board));
@@ -187,7 +216,7 @@ public class ComputerPlayer implements IPlayer {
 		return currentBestCol;
 	}
 
-	private ArrayList<Integer> deleteFullColumns() {
+	private ArrayList<Integer> deleteFullColumns(Token[][] board) {
 		ArrayList<Integer> cols = new ArrayList<Integer>();
 		for (int col = 0; col < COLS; col++)
 			if (!isColFull(board, col))
