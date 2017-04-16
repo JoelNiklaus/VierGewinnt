@@ -1,0 +1,44 @@
+Smarty as O -- vs. -- TeamPascal as X
++-------------------------------------------------------+
+O: 4 ( 0ms )
+X: 4 ( 0ms )
+O: 5 ( 0ms )
+X: 3 ( 0ms )
+O: 4 ( 0ms )
+X: 6 ( 0ms )
+O: 4 ( 0ms )
+X: 4 ( 0ms )
+O: 4 ( 0ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 5: board was modified
+O: 2 ( 0ms )
+X: 3 ( 0ms )
+->Info:
+	Move Nr. 6: board was modified
+O: 3 ( 0ms )
+X: 5 ( 0ms )
+->Info:
+	Move Nr. 7: board was modified
+O: 3 ( 0ms )
+X: 6 ( 0ms )
+->Info:
+	Move Nr. 8: board was modified
+Final Board:
++---+---+---+---+---+---+---+
+|   |   |   | O |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   |   | X |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   | O | O |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   | O | O |   |   |   | 
++---+---+---+---+---+---+---+
+|   | O | X | X | X | X |   | 
++---+---+---+---+---+---+---+
+|   | X | X | O | O | X |   | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player two wins
+Team TeamPascal (X) wins.
++-------------------------------------------------------+

@@ -1,0 +1,45 @@
+MongoBongos as O -- vs. -- TeamPascal as X
++-------------------------------------------------------+
+O: 4 ( 140ms )
+X: 5 ( 0ms )
+O: 4 ( 130ms )
+X: 4 ( 0ms )
+O: 4 ( 850ms )
+X: 5 ( 0ms )
+O: 4 ( 670ms )
+X: 5 ( 0ms )
+O: 5 ( 180ms )
+X: 6 ( 0ms )
+O: 4 ( 2220ms )
+X: 7 ( 0ms )
+->Info:
+	Move Nr. 6: board was modified
+O: 3 ( 640ms )
+X: 6 ( 0ms )
+->Info:
+	Move Nr. 7: board was modified
+O: 2 ( 140ms )
+X: 6 ( 0ms )
+->Info:
+	Move Nr. 8: board was modified
+O: 1 ( 0ms )
+->Info:
+	Move Nr. 9: board was modified
+Final Board:
++---+---+---+---+---+---+---+
+|   |   |   | O |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   |   | O |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   |   | O | O |   |   | 
++---+---+---+---+---+---+---+
+|   |   |   | X | X | X |   | 
++---+---+---+---+---+---+---+
+|   |   |   | O | X | X |   | 
++---+---+---+---+---+---+---+
+| O | O | O | O | X | X | X | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player one wins
+Team MongoBongos (O) wins.
++-------------------------------------------------------+

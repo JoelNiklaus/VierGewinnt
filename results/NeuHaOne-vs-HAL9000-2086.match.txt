@@ -1,0 +1,56 @@
+NeuHaOne as O -- vs. -- HAL9000 as X
++-------------------------------------------------------+
+O: 6 ( 0ms )
+X: 4 ( 0ms )
+O: 6 ( 0ms )
+X: 4 ( 0ms )
+O: 6 ( 0ms )
+X: 6 ( 0ms )
+O: 4 ( 0ms )
+X: 2 ( 0ms )
+O: 3 ( 0ms )
+X: 5 ( 0ms )
+O: 4 ( 0ms )
+X: 6 ( 0ms )
+O: 4 ( 0ms )
+X: 4 ( 0ms )
+O: 7 ( 0ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 8: Move was interupted:java.lang.ArrayIndexOutOfBoundsException: 6
+	Trace (leading 1):
+		CPHAL9000.isMe(CPHAL9000.java:494)
+	--> 1 was selected randomly
+O: 7 ( 0ms )
+X: 3 ( 0ms )
+->Info:
+	Move Nr. 9: Move was interupted:java.lang.ArrayIndexOutOfBoundsException: 6
+	Trace (leading 1):
+		CPHAL9000.isMe(CPHAL9000.java:494)
+	--> 2 was selected randomly
+O: 5 ( 0ms )
+X: 3 ( 0ms )
+->Info:
+	Move Nr. 10: Move was interupted:java.lang.ArrayIndexOutOfBoundsException: 6
+	Trace (leading 1):
+		CPHAL9000.isMe(CPHAL9000.java:494)
+	--> 2 was selected randomly
+O: 5 ( 0ms )
+Final Board:
++---+---+---+---+---+---+---+
+|   |   |   | X |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   |   | O |   | X |   | 
++---+---+---+---+---+---+---+
+|   |   |   | O |   | X |   | 
++---+---+---+---+---+---+---+
+|   |   | X | O | O | O |   | 
++---+---+---+---+---+---+---+
+|   | X | X | X | O | O | O | 
++---+---+---+---+---+---+---+
+|   | X | O | X | X | O | O | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player one wins
+Team NeuHaOne (O) wins.
++-------------------------------------------------------+

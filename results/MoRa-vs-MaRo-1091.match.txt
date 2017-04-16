@@ -1,0 +1,75 @@
+MoRa as O -- vs. -- MaRo as X
++-------------------------------------------------------+
+O: 4 ( 0ms )
+X: 4 ( 500ms )
+O: 3 ( 0ms )
+X: 5 ( 510ms )
+O: 6 ( 0ms )
+X: 2 ( 510ms )
+O: 2 ( 0ms )
+X: 4 ( 510ms )
+O: 2 ( 0ms )
+X: 4 ( 510ms )
+O: 4 ( 0ms )
+->Info:
+	Move Nr. 6: board was modified
+X: 2 ( 480ms )
+O: 2 ( 0ms )
+X: 3 ( 460ms )
+O: 3 ( 0ms )
+->Info:
+	Move Nr. 8: board was modified
+X: 5 ( 460ms )
+O: 6 ( 0ms )
+->Info:
+	Move Nr. 9: board was modified
+X: 5 ( 460ms )
+O: 5 ( 0ms )
+->Info:
+	Move Nr. 10: board was modified
+X: 6 ( 450ms )
+O: 1 ( 0ms )
+X: 1 ( 450ms )
+O: 3 ( 0ms )
+X: 3 ( 450ms )
+O: 2 ( 0ms )
+->Info:
+	Move Nr. 13: board was modified
+X: 1 ( 370ms )
+O: 4 ( 0ms )
+->Info:
+	Move Nr. 14: board was modified
+X: 1 ( 340ms )
+O: 1 ( 0ms )
+->Info:
+	Move Nr. 15: board was modified
+X: 7 ( 330ms )
+O: 3 ( 0ms )
+X: 1 ( 310ms )
+O: 5 ( 0ms )
+X: 5 ( 300ms )
+O: 6 ( 0ms )
+X: 6 ( 290ms )
+O: 6 ( 0ms )
+X: 7 ( 280ms )
+O: 7 ( 0ms )
+->Info:
+	Move Nr. 20: board was modified
+Final Board:
++---+---+---+---+---+---+---+
+| X | O | O | O | X | O |   | 
++---+---+---+---+---+---+---+
+| O | O | X | O | O | X |   | 
++---+---+---+---+---+---+---+
+| X | X | O | X | O | O |   | 
++---+---+---+---+---+---+---+
+| X | O | O | X | X | X | O | 
++---+---+---+---+---+---+---+
+| X | O | X | X | X | O | X | 
++---+---+---+---+---+---+---+
+| O | X | O | O | X | O | X | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player one wins
+Team MoRa (O) wins.
++-------------------------------------------------------+

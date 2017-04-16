@@ -1,0 +1,59 @@
+Results of VierGewinnt Competition:
+----------------------------------------------------
+
+Wins:
+	273:	FriRos
+	270:	Hallo3141516
+	269:	MongoBongos
+	262:	LoopingLoop
+	222:	AngeRina
+	207:	MaRo
+	199:	NeuHaOne
+	197:	NeuHaOne
+	168:	TeamPascal
+	141:	MoRa
+	116:	MakeTheBotGreatAgain
+	92:	HAL9000
+	79:	ZilBa
+	69:	Smarty
+	43:	SyPf
+	37:	Timona
+	32:	Unit
+
+Wins as starting player:
+	131:	FriRos
+	129:	MongoBongos
+	129:	LoopingLoop
+	120:	Hallo3141516
+	99:	MaRo
+	91:	NeuHaOne
+	90:	NeuHaOne
+	90:	AngeRina
+	84:	TeamPascal
+	73:	MoRa
+	58:	MakeTheBotGreatAgain
+	42:	HAL9000
+	41:	ZilBa
+	33:	Smarty
+	29:	SyPf
+	22:	Unit
+	22:	Timona
+
+Wins as following player:
+	150:	Hallo3141516
+	142:	FriRos
+	140:	MongoBongos
+	133:	LoopingLoop
+	132:	AngeRina
+	108:	NeuHaOne
+	108:	MaRo
+	107:	NeuHaOne
+	84:	TeamPascal
+	68:	MoRa
+	58:	MakeTheBotGreatAgain
+	50:	HAL9000
+	38:	ZilBa
+	36:	Smarty
+	15:	Timona
+	14:	SyPf
+	10:	Unit

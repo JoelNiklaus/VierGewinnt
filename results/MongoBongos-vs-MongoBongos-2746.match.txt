@@ -1,0 +1,62 @@
+MongoBongos as O -- vs. -- MongoBongos as X
++-------------------------------------------------------+
+O: 4 ( 140ms )
+X: 4 ( 120ms )
+O: 4 ( 100ms )
+X: 4 ( 870ms )
+O: 4 ( 620ms )
+X: 4 ( 570ms )
+O: 3 ( 170ms )
+X: 2 ( 110ms )
+O: 3 ( 840ms )
+X: 3 ( 680ms )
+O: 3 ( 550ms )
+X: 2 ( 340ms )
+O: 1 ( 40ms )
+X: 2 ( 820ms )
+O: 2 ( 2230ms )
+X: 6 ( 1950ms )
+O: 2 ( 10001ms )
+->Info:
+	Move Nr. 9: Player was thinking to long! Move "1" was selected randomly.
+X: 3 ( 550ms )
+O: 3 ( 0ms )
+X: 2 ( 50ms )
+O: 1 ( 0ms )
+X: 1 ( 10ms )
+O: 1 ( 0ms )
+X: 6 ( 0ms )
+O: 1 ( 0ms )
+X: 1 ( 0ms )
+O: 5 ( 0ms )
+X: 5 ( 0ms )
+O: 5 ( 0ms )
+X: 5 ( 0ms )
+O: 5 ( 0ms )
+X: 5 ( 0ms )
+O: 6 ( 0ms )
+X: 6 ( 0ms )
+O: 6 ( 0ms )
+X: 6 ( 0ms )
+O: 7 ( 0ms )
+X: 7 ( 0ms )
+->Info:
+	Move Nr. 19: board was modified
+Final Board:
++---+---+---+---+---+---+---+
+| X | X | O | X | X | X |   | 
++---+---+---+---+---+---+---+
+| O | O | X | O | O | O |   | 
++---+---+---+---+---+---+---+
+| O | O | O | X | X | X |   | 
++---+---+---+---+---+---+---+
+| X | X | X | O | O | O |   | 
++---+---+---+---+---+---+---+
+| O | X | O | X | X | X | X | 
++---+---+---+---+---+---+---+
+| O | X | O | O | O | X | O | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player two wins
+Team MongoBongos (X) wins.
++-------------------------------------------------------+

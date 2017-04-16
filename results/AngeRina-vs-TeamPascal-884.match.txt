@@ -1,0 +1,71 @@
+AngeRina as O -- vs. -- TeamPascal as X
++-------------------------------------------------------+
+O: 4 ( 190ms )
+X: 4 ( 0ms )
+O: 6 ( 110ms )
+X: 5 ( 0ms )
+O: 5 ( 220ms )
+X: 4 ( 0ms )
+O: 4 ( 200ms )
+X: 3 ( 0ms )
+O: 5 ( 140ms )
+X: 5 ( 0ms )
+O: 3 ( 80ms )
+X: 3 ( 0ms )
+O: 4 ( 130ms )
+X: 6 ( 0ms )
+O: 4 ( 40ms )
+X: 6 ( 0ms )
+->Info:
+	Move Nr. 8: board was modified
+O: 7 ( 30ms )
+X: 6 ( 0ms )
+->Info:
+	Move Nr. 9: board was modified
+O: 6 ( 40ms )
+X: 7 ( 0ms )
+->Info:
+	Move Nr. 10: board was modified
+O: 2 ( 20ms )
+X: 5 ( 0ms )
+->Info:
+	Move Nr. 11: board was modified
+O: 3 ( 0ms )
+X: 7 ( 0ms )
+->Info:
+	Move Nr. 12: board was modified
+O: 7 ( 10ms )
+X: 3 ( 0ms )
+->Info:
+	Move Nr. 13: board was modified
+O: 1 ( 0ms )
+X: 5 ( 0ms )
+->Info:
+	Move Nr. 14: board was modified
+O: 1 ( 0ms )
+X: 1 ( 0ms )
+->Info:
+	Move Nr. 15: board was modified
+O: 7 ( 0ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 16: board was modified
+O: 2 ( 0ms )
+Final Board:
++---+---+---+---+---+---+---+
+|   |   |   | O | X |   |   | 
++---+---+---+---+---+---+---+
+|   |   | X | O | X | O | O | 
++---+---+---+---+---+---+---+
+|   |   | O | O | X | X | O | 
++---+---+---+---+---+---+---+
+| X | O | X | X | O | X | X | 
++---+---+---+---+---+---+---+
+| O | X | O | X | O | X | X | 
++---+---+---+---+---+---+---+
+| O | O | X | O | X | O | O | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player one wins
+Team AngeRina (O) wins.
++-------------------------------------------------------+

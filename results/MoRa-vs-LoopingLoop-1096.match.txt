@@ -1,0 +1,46 @@
+MoRa as O -- vs. -- LoopingLoop as X
++-------------------------------------------------------+
+O: 6 ( 0ms )
+X: 4 ( 440ms )
+O: 1 ( 0ms )
+X: 2 ( 440ms )
+O: 1 ( 0ms )
+X: 5 ( 390ms )
+O: 3 ( 0ms )
+->Info:
+	Move Nr. 4: board was modified
+X: 4 ( 450ms )
+O: 1 ( 0ms )
+X: 1 ( 300ms )
+O: 4 ( 0ms )
+X: 5 ( 380ms )
+O: 6 ( 0ms )
+X: 5 ( 320ms )
+O: 5 ( 0ms )
+->Info:
+	Move Nr. 8: board was modified
+X: 3 ( 310ms )
+O: 2 ( 0ms )
+->Info:
+	Move Nr. 9: board was modified
+X: 2 ( 20ms )
+->Info:
+	Move Nr. 9: board was modified
+Final Board:
++---+---+---+---+---+---+---+
+|   |   |   |   |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   |   |   |   |   |   | 
++---+---+---+---+---+---+---+
+| X |   |   |   | O |   |   | 
++---+---+---+---+---+---+---+
+| O | X |   | O | X |   |   | 
++---+---+---+---+---+---+---+
+| O | O | X | X | X | O |   | 
++---+---+---+---+---+---+---+
+| O | X | O | X | X | O |   | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player two wins
+Team LoopingLoop (X) wins.
++-------------------------------------------------------+

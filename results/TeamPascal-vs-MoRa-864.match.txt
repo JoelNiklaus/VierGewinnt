@@ -1,0 +1,70 @@
+TeamPascal as O -- vs. -- MoRa as X
++-------------------------------------------------------+
+O: 4 ( 0ms )
+X: 1 ( 0ms )
+O: 3 ( 0ms )
+X: 2 ( 0ms )
+O: 5 ( 0ms )
+X: 6 ( 0ms )
+->Info:
+	Move Nr. 3: board was modified
+O: 2 ( 0ms )
+X: 3 ( 0ms )
+O: 2 ( 0ms )
+X: 6 ( 0ms )
+O: 2 ( 0ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 6: board was modified
+O: 6 ( 0ms )
+X: 2 ( 0ms )
+O: 5 ( 0ms )
+->Info:
+	Move Nr. 8: board was modified
+X: 5 ( 0ms )
+O: 7 ( 0ms )
+->Info:
+	Move Nr. 9: board was modified
+X: 7 ( 0ms )
+O: 1 ( 0ms )
+->Info:
+	Move Nr. 10: board was modified
+X: 3 ( 0ms )
+O: 1 ( 0ms )
+->Info:
+	Move Nr. 11: board was modified
+X: 4 ( 0ms )
+O: 1 ( 0ms )
+->Info:
+	Move Nr. 12: board was modified
+X: 1 ( 0ms )
+->Info:
+	Move Nr. 12: board was modified
+O: 3 ( 0ms )
+->Info:
+	Move Nr. 13: board was modified
+X: 3 ( 0ms )
+O: 4 ( 0ms )
+->Info:
+	Move Nr. 14: board was modified
+X: 4 ( 0ms )
+->Info:
+	Move Nr. 14: board was modified
+Final Board:
++---+---+---+---+---+---+---+
+|   | X |   |   |   |   |   | 
++---+---+---+---+---+---+---+
+| X | X | X |   |   |   |   | 
++---+---+---+---+---+---+---+
+| O | O | O | X |   |   |   | 
++---+---+---+---+---+---+---+
+| O | O | X | O | X | O |   | 
++---+---+---+---+---+---+---+
+| O | O | X | X | O | X | X | 
++---+---+---+---+---+---+---+
+| X | X | O | O | O | X | O | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player two wins
+Team MoRa (X) wins.
++-------------------------------------------------------+

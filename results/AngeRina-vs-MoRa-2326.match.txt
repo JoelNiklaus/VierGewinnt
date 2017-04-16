@@ -1,0 +1,53 @@
+AngeRina as O -- vs. -- MoRa as X
++-------------------------------------------------------+
+O: 4 ( 200ms )
+X: 6 ( 0ms )
+O: 6 ( 170ms )
+X: 1 ( 0ms )
+O: 1 ( 40ms )
+X: 1 ( 0ms )
+O: 5 ( 50ms )
+X: 5 ( 0ms )
+O: 3 ( 80ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 5: board was modified
+O: 2 ( 70ms )
+X: 7 ( 0ms )
+O: 3 ( 70ms )
+X: 4 ( 0ms )
+->Info:
+	Move Nr. 7: board was modified
+O: 4 ( 20ms )
+X: 2 ( 0ms )
+O: 2 ( 50ms )
+X: 3 ( 0ms )
+O: 3 ( 90ms )
+X: 2 ( 0ms )
+O: 4 ( 30ms )
+X: 1 ( 0ms )
+->Info:
+	Move Nr. 11: board was modified
+O: 3 ( 10ms )
+X: 5 ( 0ms )
+->Info:
+	Move Nr. 12: board was modified
+O: 5 ( 10ms )
+Final Board:
++---+---+---+---+---+---+---+
+|   |   |   |   |   |   |   | 
++---+---+---+---+---+---+---+
+|   | X | O |   |   |   |   | 
++---+---+---+---+---+---+---+
+| X | O | O | O | O |   |   | 
++---+---+---+---+---+---+---+
+| X | X | X | O | X |   |   | 
++---+---+---+---+---+---+---+
+| O | O | O | X | X | O |   | 
++---+---+---+---+---+---+---+
+| X | X | O | O | O | X | X | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player one wins
+Team AngeRina (O) wins.
++-------------------------------------------------------+

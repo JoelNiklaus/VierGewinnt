@@ -1,0 +1,63 @@
+MongoBongos as O -- vs. -- MoRa as X
++-------------------------------------------------------+
+O: 4 ( 140ms )
+X: 1 ( 0ms )
+O: 4 ( 110ms )
+X: 5 ( 0ms )
+O: 4 ( 770ms )
+X: 4 ( 0ms )
+->Info:
+	Move Nr. 3: board was modified
+O: 4 ( 850ms )
+X: 3 ( 0ms )
+O: 4 ( 480ms )
+X: 1 ( 0ms )
+O: 3 ( 150ms )
+X: 5 ( 0ms )
+O: 3 ( 410ms )
+X: 7 ( 0ms )
+O: 3 ( 1150ms )
+X: 3 ( 0ms )
+->Info:
+	Move Nr. 8: board was modified
+O: 3 ( 620ms )
+X: 5 ( 0ms )
+O: 5 ( 0ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 10: board was modified
+O: 2 ( 260ms )
+X: 1 ( 0ms )
+O: 1 ( 10ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 12: board was modified
+O: 2 ( 100ms )
+X: 1 ( 0ms )
+->Info:
+	Move Nr. 13: board was modified
+O: 1 ( 0ms )
+X: 2 ( 0ms )
+->Info:
+	Move Nr. 14: board was modified
+O: 2 ( 0ms )
+->Info:
+	Move Nr. 15: board was modified
+Final Board:
++---+---+---+---+---+---+---+
+| O | O | O | O |   |   |   | 
++---+---+---+---+---+---+---+
+| X | X | X | O |   |   |   | 
++---+---+---+---+---+---+---+
+| O | O | O | X | O |   |   | 
++---+---+---+---+---+---+---+
+| X | X | O | O | X |   |   | 
++---+---+---+---+---+---+---+
+| X | O | O | O | X |   |   | 
++---+---+---+---+---+---+---+
+| X | X | X | O | X |   | X | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player one wins
+Team MongoBongos (O) wins.
++-------------------------------------------------------+

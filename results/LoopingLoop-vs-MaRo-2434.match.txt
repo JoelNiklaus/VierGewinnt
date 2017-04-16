@@ -1,0 +1,59 @@
+LoopingLoop as O -- vs. -- MaRo as X
++-------------------------------------------------------+
+O: 4 ( 440ms )
+X: 4 ( 500ms )
+O: 5 ( 440ms )
+X: 3 ( 500ms )
+O: 6 ( 420ms )
+X: 7 ( 510ms )
+O: 5 ( 420ms )
+X: 5 ( 510ms )
+O: 6 ( 410ms )
+X: 6 ( 510ms )
+O: 6 ( 200ms )
+->Info:
+	Move Nr. 6: board was modified
+X: 4 ( 500ms )
+O: 5 ( 260ms )
+X: 4 ( 500ms )
+O: 4 ( 80ms )
+->Info:
+	Move Nr. 8: board was modified
+X: 3 ( 470ms )
+O: 3 ( 40ms )
+->Info:
+	Move Nr. 9: board was modified
+X: 7 ( 470ms )
+O: 7 ( 140ms )
+->Info:
+	Move Nr. 10: board was modified
+X: 4 ( 470ms )
+O: 6 ( 90ms )
+X: 2 ( 390ms )
+O: 5 ( 50ms )
+X: 2 ( 380ms )
+O: 2 ( 10ms )
+X: 1 ( 380ms )
+O: 1 ( 0ms )
+->Info:
+	Move Nr. 14: board was modified
+X: 3 ( 380ms )
+O: 3 ( 10ms )
+Final Board:
++---+---+---+---+---+---+---+
+|   |   |   | X |   |   |   | 
++---+---+---+---+---+---+---+
+|   |   | O | O | O | O |   | 
++---+---+---+---+---+---+---+
+|   |   | X | X | O | O |   | 
++---+---+---+---+---+---+---+
+|   | O | O | X | X | X | O | 
++---+---+---+---+---+---+---+
+| O | X | X | X | O | O | X | 
++---+---+---+---+---+---+---+
+| X | X | X | O | O | O | X | 
++---+---+---+---+---+---+---+
+  1   2   3   4   5   6   7  
+Final State: player one wins
+Team LoopingLoop (O) wins.
++-------------------------------------------------------+
